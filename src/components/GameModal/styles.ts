@@ -30,4 +30,11 @@ export const Content = styled.div`
   button + button {
     margin-top: 1.2rem;
   }
+
+  #single-player,
+  #multiplayerplayer {
+    label {
+      display: block;
+    }
+  }
 `;

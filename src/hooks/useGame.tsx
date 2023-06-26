@@ -1,8 +1,15 @@
 import { ReactNode, createContext, useContext, useReducer } from "react";
 
+interface Player {
+  name: string;
+  score: number;
+}
+
 interface GameState {
   mode: "single-player" | "multiplayer";
   difficulty: "easy" | "hard";
+  playerX: Player;
+  playerCircle: Player;
   isGameModaVisible: boolean;
 }
 
@@ -44,6 +51,8 @@ const GameContext = createContext({} as Context);
 const initialState: GameState = {
   mode: "single-player",
   difficulty: "easy",
+  playerX: { name: "", score: 0 },
+  playerCircle: { name: "", score: 0 },
   isGameModaVisible: true,
 };
 
