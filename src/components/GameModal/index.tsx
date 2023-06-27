@@ -1,32 +1,49 @@
+import { useState } from "react";
 import { Button } from "../Button";
-import { useGame, GameActions } from "../../hooks/useGame";
+import { useGame, GameActions, Player } from "../../hooks/useGame";
 import { Container, Content } from "./styles";
-import { ReactNode, useEffect, useState } from "react";
 
-interface Form {
-  type: string;
-  title: string;
-  content: ReactNode;
-}
+type FormStep = "mode" | "single-player" | "multiplayer" | "difficulty";
 
 export function GameModal() {
   const { state, dispatch } = useGame();
   const [title, setTitle] = useState("Choose the game mode");
-  const [content, setContent] = useState<ReactNode>();
+  const [formStep, setFormStep] = useState<FormStep>("mode");
   const [playerXName, setPlayerXName] = useState("");
-  const [siglePlayerType, setSiglePlayerType] = useState<"x" | "circle">("x");
-  const [playerCircleName, setPlayerCircleName] = useState("");
+  const [playerOName, setPlayerOName] = useState("");
+  const [singlePlayerName, setSinglePlayerName] = useState("");
+  const [singlePlayerType, setSinglePlayerType] = useState<"" | "x" | "o">("x");
 
-  function changeForm(type: string) {
-    const form = forms.find((form) => form.type === type);
+  function setPlayers(players: { playerX: Player; playerO: Player }) {
+    dispatch({ type: GameActions.setPlayers, payload: players });
+  }
 
-    if (form) {
-      setTitle(form.title);
-      setContent(form.content);
+  function closeModal() {
+    dispatch({ type: GameActions.setIsGameModaVisible, payload: false });
+  }
+
+  function changeForm(step: FormStep) {
+    setFormStep(step);
+
+    switch (step) {
+      case "mode":
+        setTitle("Choose the mode");
+        break;
+      case "multiplayer":
+        setTitle("What's the name of each player?");
+        break;
+      case "single-player":
+        setTitle("What's your name?");
+        break;
+      case "difficulty":
+        setTitle("Set the difficulty");
+        break;
+      default:
+        setTitle("Set the form type");
     }
   }
 
-  function handleModeButtonClick(mode: string) {
+  function handleModeButtonClick(mode: FormStep) {
     dispatch({ type: GameActions.setMode, payload: mode });
 
     changeForm(mode);
@@ -35,93 +52,132 @@ export function GameModal() {
   function handleDifficultyButtonClick(difficulty: string) {
     dispatch({ type: GameActions.setMode, payload: difficulty });
 
-    dispatch({ type: GameActions.setIsGameModaVisible, payload: false });
+    let playerX, playerO;
+
+    if (singlePlayerType === "x") {
+      playerX = { name: singlePlayerName, score: 0 };
+      playerO = { name: `Bot ${difficulty}`, score: 0 };
+    } else {
+      playerX = { name: `Bot ${difficulty}`, score: 0 };
+      playerO = { name: singlePlayerName, score: 0 };
+    }
+
+    setPlayers({ playerX, playerO });
+    closeModal();
   }
 
-  function handleSinglePlayerFormButtonClick() {}
+  function handleMultiplayerFormButtonClick() {
+    const playerX = { name: playerXName, score: 0 };
+    const playerO = { name: playerOName, score: 0 };
 
-  function handleMultiplayerFormButtonClick() {}
+    setPlayers({ playerX, playerO });
+    closeModal();
+  }
 
-  const forms: Form[] = [
-    {
-      type: "mode",
-      title: "Choose the mode",
-      content: (
-        <div id="mode">
-          <Button
-            title="Single-Player"
-            onClick={() => handleModeButtonClick("single-player")}
-          />
-          <Button
-            title="MultiPlayer"
-            onClick={() => handleModeButtonClick("multiplayer")}
-          />
-        </div>
-      ),
-    },
-    {
-      type: "multiplayer",
-      title: "What's the name of each player?",
-      content: (
-        <div id="multiplayer">
-          <label htmlFor="player-x-name">Player X</label>
-          <input type="text" id="player-x-name" value={playerXName} autoFocus />
-
-          <label htmlFor="player-x-name">Player Circle</label>
-          <input type="text" id="player-circle-name" value={playerCircleName} />
-
-          <Button
-            title="MultiPlayer"
-            onClick={handleMultiplayerFormButtonClick}
-          />
-        </div>
-      ),
-    },
-    {
-      type: "single-player",
-      title: "What's your name?",
-      content: (
-        <div id="single-player">
-          <label htmlFor="player-name"></label>
-          <input type="text" id="player-name" value={playerXName} autoFocus />
-
-          <Button
-            title="MultiPlayer"
-            onClick={handleSinglePlayerFormButtonClick}
-          />
-        </div>
-      ),
-    },
-    {
-      type: "difficulty",
-      title: "Set the dificulty",
-      content: (
-        <div id="difficulty">
-          <Button
-            title="Easy"
-            onClick={() => handleDifficultyButtonClick("easy")}
-          />
-          <Button
-            title="Hard"
-            onClick={() => handleDifficultyButtonClick("hard")}
-          />
-        </div>
-      ),
-    },
-  ];
-
-  useEffect(() => {
-    setTitle(forms[0].title);
-    setContent(forms[0].content);
-  }, []);
+  function handleSinglePlayerFormButtonClick() {
+    setFormStep("difficulty");
+  }
 
   if (!state.isGameModaVisible) return;
 
   return (
     <Container>
+      <h1>
+        T<span>i</span>c <span>T</span>a<span>c</span> T<span>o</span>e
+      </h1>
       <Content>
         <h2>{title}</h2>
-        {content}
+
+        {formStep === "mode" && (
+          <>
+            <Button
+              title="Single-Player"
+              onClick={() => handleModeButtonClick("single-player")}
+            />
+            <Button
+              title="MultiPlayer"
+              onClick={() => handleModeButtonClick("multiplayer")}
+            />
+          </>
+        )}
+
+        {formStep === "multiplayer" && (
+          <>
+            <label htmlFor="player-x-name">Player X:</label>
+            <input
+              type="text"
+              id="player-x-name"
+              value={playerXName}
+              onChange={({ target }) => setPlayerXName(target.value)}
+              autoFocus
+            />
+
+            <label htmlFor="player-x-name">Player Circle:</label>
+            <input
+              type="text"
+              id="player-circle-name"
+              value={playerOName}
+              onChange={({ target }) => setPlayerOName(target.value)}
+            />
+
+            <Button title="Play" onClick={handleMultiplayerFormButtonClick} />
+          </>
+        )}
+
+        {formStep === "single-player" && (
+          <>
+            <label htmlFor="player-x-name">Your name:</label>
+            <input
+              type="text"
+              id="player-x-name"
+              value={singlePlayerName}
+              onChange={({ target }) => setSinglePlayerName(target.value)}
+              autoFocus
+            />
+
+            <div className="input-radio">
+              <label htmlFor="x">Play as X</label>
+              <input
+                type="radio"
+                name="single-player-type"
+                id="x"
+                value={singlePlayerType}
+                onChange={() => setSinglePlayerType("x")}
+                checked={singlePlayerType === "x"}
+              />
+            </div>
+
+            <div className="input-radio">
+              <label htmlFor="o">Play as O</label>
+              <input
+                type="radio"
+                name="single-player-type"
+                id="o"
+                value={singlePlayerType}
+                onChange={() => setSinglePlayerType("o")}
+                checked={singlePlayerType === "o"}
+              />
+            </div>
+
+            <Button
+              title="Set difficulty"
+              onClick={handleSinglePlayerFormButtonClick}
+            />
+          </>
+        )}
+
+        {formStep === "difficulty" && (
+          <>
+            <Button
+              title="Easy"
+              onClick={() => handleDifficultyButtonClick("easy")}
+            />
+            <Button
+              title="Hard"
+              onClick={() => handleDifficultyButtonClick("hard")}
+            />
+          </>
+        )}
       </Content>
     </Container>
   );

@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useReducer } from "react";
 
-interface Player {
+export interface Player {
   name: string;
   score: number;
 }
@@ -9,7 +9,7 @@ interface GameState {
   mode: "single-player" | "multiplayer";
   difficulty: "easy" | "hard";
   playerX: Player;
-  playerCircle: Player;
+  playerO: Player;
   isGameModaVisible: boolean;
 }
 
@@ -21,6 +21,7 @@ export enum GameActions {
   setMode,
   setIsGameModaVisible,
   setDifficulty,
+  setPlayers,
 }
 
 interface Action {
@@ -41,6 +42,9 @@ function GameReducer(state: GameState, action: Action) {
       return { ...state, difficulty: action.payload };
     case GameActions.setIsGameModaVisible:
       return { ...state, isGameModaVisible: action.payload };
+    case GameActions.setPlayers:
+      const { playerX, playerO } = action.payload;
+      return { ...state, playerX, playerO };
     default:
       return state;
   }
@@ -52,7 +56,7 @@ const initialState: GameState = {
   mode: "single-player",
   difficulty: "easy",
   playerX: { name: "", score: 0 },
-  playerCircle: { name: "", score: 0 },
+  playerO: { name: "", score: 0 },
   isGameModaVisible: true,
 };
 

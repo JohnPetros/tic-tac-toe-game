@@ -11,6 +11,17 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  h1 {
+    text-transform: uppercase;
+    color: ${({ theme }) => theme.colors.green};
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.white};
+  }
 `;
 
 export const Content = styled.div`
@@ -22,19 +33,55 @@ export const Content = styled.div`
   max-width: 95%;
   padding: 3.2rem;
 
+  font-weight: 500;
+
   h2 {
     text-align: center;
     margin-bottom: 2.4rem;
   }
 
   button + button {
-    margin-top: 1.2rem;
+    margin-top: 1.6rem;
   }
 
-  #single-player,
-  #multiplayerplayer {
-    label {
-      display: block;
-    }
+  label {
+    display: inline-block;
+    margin: 1.2rem 0;
+    color: ${({ theme }) => theme.colors.green};
+  }
+
+  input[type="text"] {
+    display: block;
+    width: 100%;
+    height: 3.6rem;
+    border: 2px solid ${({ theme }) => theme.colors.lightBlue};
+    padding: 1.2rem;
+  }
+
+  .input-radio {
+    margin: 1.2rem 0 2.4rem;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .input-radio + .input-radio {
+    margin-left: 2.4rem;
+  }
+
+  input[type="radio"] {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  input:focus {
+    outline-offset: 2px;
+    outline-color: ${({ theme }) => theme.colors.green};
+  }
+
+  input + button {
+    margin-top: 2.4rem;
   }
 `;
