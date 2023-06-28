@@ -26,6 +26,10 @@ export default createGlobalStyle`${css`
     font-weight: 400;
     font-family: "Roboto", sans-serif;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     background-color: ${({ theme }) => theme.colors.blue};
   }
 
