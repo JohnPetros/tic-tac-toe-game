@@ -1,13 +1,13 @@
 import { useGame } from "../../hooks/useGame";
 import { O, X } from "../Board/styles";
 import { Container, Player } from "./styles";
-import { CurrentPlayer } from "../Game";
+import { CurrentMark } from "../Game";
 
 interface BoardProps {
-  currentPlayer: CurrentPlayer;
+  currentMark: CurrentMark;
 }
 
-export function Scoreboard({ currentPlayer }: BoardProps) {
+export function Scoreboard({ currentMark }: BoardProps) {
   const {
     state: { playerX, playerO },
     dispatch,
@@ -16,7 +16,7 @@ export function Scoreboard({ currentPlayer }: BoardProps) {
   return (
     <Container>
       <div>
-        <Player isCurrentPlayer={currentPlayer === "x"}>
+        <Player isCurrentMark={currentMark === "x"}>
           <X size={2} />
           <div>
             <img src={playerX.avatar} alt="Player X avatar" />
@@ -24,11 +24,11 @@ export function Scoreboard({ currentPlayer }: BoardProps) {
           </div>
           <strong>{playerX.score}</strong>
         </Player>
-        {currentPlayer === "x" && <span>Your Turn</span>}
+        {currentMark === "x" && <span>Your Turn</span>}
       </div>
 
       <div>
-        <Player isCurrentPlayer={currentPlayer === "o"}>
+        <Player isCurrentMark={currentMark === "o"}>
           <O size={2} />
           <div>
             <img src={playerO.avatar} alt="Player X avatar" />
@@ -36,7 +36,7 @@ export function Scoreboard({ currentPlayer }: BoardProps) {
           </div>
           <strong>{playerO.score}</strong>
         </Player>
-        {currentPlayer === "o" && <span>Your Turn</span>}
+        {currentMark === "o" && <span>Your Turn</span>}
       </div>
     </Container>
   );

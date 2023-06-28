@@ -3,19 +3,19 @@ import { Board } from "../Board";
 import { Scoreboard } from "../Scoreboard";
 import { Container } from "./styles";
 
-export type CurrentPlayer = "" | "x" | "o";
+export type CurrentMark = "" | "x" | "o";
 
 export function Game() {
-  const [currentPlayer, setCurrentPlayer] = useState<CurrentPlayer>("x");
+  const [currentMark, setCurrentMark] = useState<CurrentMark>("x");
 
-  function changePlayer() {
-    setCurrentPlayer(currentPlayer === "x" ? "o" : "x");
+  function changeMark() {
+    setCurrentMark(currentMark === "x" ? "o" : "x");
   }
 
   return (
     <Container>
-      <Scoreboard currentPlayer={currentPlayer} />
-      <Board currentPlayer={currentPlayer} changePlayer={changePlayer} />
+      <Scoreboard currentMark={currentMark} />
+      <Board currentMark={currentMark} changeMark={changeMark} />
     </Container>
   );
 }

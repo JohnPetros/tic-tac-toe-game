@@ -1,4 +1,6 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
+import { Combinations } from "../../utils/board";
+const GAP_SIZE = 8;
 
 export const Container = styled.div`
   background: ${({ theme }) => theme.colors.lightBlue};
@@ -10,10 +12,12 @@ export const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  padding: 0.8rem;
-  gap: 0.8rem;
+  padding: ${GAP_SIZE}px;
+  gap: ${GAP_SIZE}px;
   align-content: center;
   justify-content: center;
+
+  position: relative;
 `;
 
 interface Cell {
@@ -73,4 +77,76 @@ export const O = styled.div<Mark>`
   border: ${({ size }) => size * 2}px solid ${({ theme }) => theme.colors.white};
   background: transparent;
   border-radius: 50%;
+`;
+
+interface EndGameLine {
+  winningCombination: Combinations;
+  cellSize: number;
+}
+
+export const EndGameLine = styled.div<EndGameLine>`
+  position: absolute;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.yellow};
+  height: 1.2rem;
+
+  ${({ winningCombination, cellSize }) => {
+    const lineWidth = cellSize * 3 + GAP_SIZE * 2;
+    const lineHeight = 12;
+    switch (winningCombination) {
+      case "firstRow":
+        return css`
+          width: ${lineWidth}px;
+          top: ${cellSize / 2 + GAP_SIZE}px;
+          left: ${GAP_SIZE}px;
+        `;
+      case "secondRow":
+        return css`
+          width: ${lineWidth}px;
+          top: ${cellSize * 2 - cellSize / 2 + GAP_SIZE * 2}px;
+          left: ${GAP_SIZE}px;
+        `;
+      case "thirdRow":
+        return css`
+          width: ${lineWidth}px;
+          top: ${cellSize * 3 - cellSize / 2 + GAP_SIZE * 2 + lineHeight / 2}px;
+          left: ${GAP_SIZE}px;
+        `;
+      case "firstColumn":
+        return css`
+          width: ${lineWidth}px;
+          top: ${lineWidth / 2 + GAP_SIZE / 2}px;
+          left: -${cellSize - GAP_SIZE + lineHeight / 2}px;
+          transform: rotate(90deg);
+        `;
+      case "secondColumn":
+        return css`
+          width: ${lineWidth}px;
+          top: ${lineWidth / 2 + GAP_SIZE / 2}px;
+          left: ${GAP_SIZE}px;
+          transform: rotate(90deg);
+        `;
+      case "thirdColumn":
+        return css`
+          width: ${lineWidth}px;
+          top: ${lineWidth / 2 + GAP_SIZE / 2}px;
+          left: ${cellSize + GAP_SIZE * 2}px;
+          transform: rotate(90deg);
+        `;
+      case "firstDiagonal":
+        return css`
+          width: ${lineWidth + cellSize + GAP_SIZE * 4}px;
+          top: ${cellSize + cellSize / 2 + GAP_SIZE}px;
+          left: -${cellSize / 2 + GAP_SIZE}px;
+          transform: rotate(45deg);
+        `;
+      case "secondDiagonal":
+        return css`
+          width: ${lineWidth + cellSize + GAP_SIZE * 4}px;
+          top: ${cellSize + cellSize / 2 + GAP_SIZE}px;
+          left: -${cellSize / 2 + GAP_SIZE}px;
+          transform: rotate(-45deg);
+        `;
+    }
+  }}
 `;

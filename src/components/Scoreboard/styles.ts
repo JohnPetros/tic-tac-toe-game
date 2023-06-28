@@ -14,7 +14,7 @@ export const Container = styled.div`
 `;
 
 interface Player {
-  isCurrentPlayer: boolean;
+  isCurrentMark: boolean;
 }
 
 export const Player = styled.div<Player>`
@@ -28,8 +28,8 @@ export const Player = styled.div<Player>`
   background-color: ${({ theme }) => theme.colors.darkBlue};
 
   border: 4px solid transparent;
-  border-color: ${({ theme, isCurrentPlayer }) =>
-    theme.colors[isCurrentPlayer ? "yellow" : "transparent"]};
+  border-color: ${({ theme, isCurrentMark }) =>
+    theme.colors[isCurrentMark ? "yellow" : "transparent"]};
   border-radius: 8px;
 
   div:nth-child(2) {

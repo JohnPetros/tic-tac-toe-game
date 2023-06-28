@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import { Container, Cell, X, O } from "./styles";
-import { CurrentPlayer } from "../Game";
+import { useEffect, useRef, useState } from "react";
+import { Container, Cell, X, O, EndGameLine } from "./styles";
+import { CurrentMark } from "../Game";
+import { Combinations, board } from "../../utils/board";
 
 interface BoardProps {
-  currentPlayer: CurrentPlayer;
-  changePlayer: () => void;
+  currentMark: CurrentMark;
+  changeMark: () => void;
 }
 
 export interface CellData {
   id: number;
-  mark: CurrentPlayer;
+  mark: CurrentMark;
   isMarked: boolean;
 }
 
@@ -22,10 +23,30 @@ const markComponent: MarkComponent = {
   o: <O size={8} />,
 };
 
-export function Board({ currentPlayer, changePlayer }: BoardProps) {
+export function Board({ currentMark, changeMark }: BoardProps) {
   const [cells, setCells] = useState<CellData[]>([]);
+  const [winningCombination, setWinnigCombination] =
+    useState<Combinations>("secondDiagonal");
+  const [isEndGameLineVisible, setIsEndGameLineVisible] = useState(false);
+  const cellRef = useRef<HTMLDivElement>(null);
 
-  function markCell(id: number, mark: CurrentPlayer, canMark: boolean = true) {
+  function checkCombination(index: number) {
+    return cells[index - 1].mark === currentMark;
+  }
+
+  function hasWinner() {
+    const combinations: Combinations[] = Object.keys(board) as Combinations[];
+    return Object.values(board).some((combination, index) => {
+      const isWinningCombination = combination.every(checkCombination);
+
+      if (isWinningCombination) {
+        setWinnigCombination(combinations[index]);
+        return true;
+      }
+    });
+  }
+
+  function markCell(id: number, mark: CurrentMark, canMark: boolean = true) {
     const markedCell = cells.find((cell) => cell.id === id) ?? cells[0];
 
     markedCell.mark = mark;
@@ -36,7 +57,10 @@ export function Board({ currentPlayer, changePlayer }: BoardProps) {
       )
     );
 
-    if (canMark) changePlayer();
+    if (canMark) {
+      changeMark();
+      setIsEndGameLineVisible(hasWinner());
+    }
   }
 
   useEffect(() => {
@@ -48,16 +72,23 @@ export function Board({ currentPlayer, changePlayer }: BoardProps) {
     setCells(cells);
   }, []);
 
+  useEffect(() => {
+    if (cellRef.current) {
+      console.log(cellRef.current.clientWidth);
+    }
+  }, [cellRef.current]);
+
   return (
     <Container>
       {cells.map(({ id, mark, isMarked }) => {
         return (
           <Cell
+            ref={id === 1 ? cellRef : null}
             key={id.toString()}
             isMarked={isMarked}
-            onClick={() => markCell(id, currentPlayer)}
+            onClick={() => markCell(id, currentMark)}
             onMouseOver={() =>
-              isMarked ? null : markCell(id, currentPlayer, false)
+              isMarked ? null : markCell(id, currentMark, false)
             }
             onMouseOut={() => (isMarked ? null : markCell(id, "", false))}
           >
@@ -65,6 +96,12 @@ export function Board({ currentPlayer, changePlayer }: BoardProps) {
           </Cell>
         );
       })}
+      {isEndGameLineVisible && (
+        <EndGameLine
+          winningCombination={winningCombination}
+          cellSize={cellRef?.current?.clientWidth ?? 109}
+        />
+      )}
     </Container>
   );
 }
