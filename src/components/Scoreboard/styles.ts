@@ -10,11 +10,9 @@ export const Player = styled.div`
   flex-direction: column;
   align-items: center;
 
-  width: 14rem;
+  width: 12rem;
   /* height: 16rem; */
   padding: 1.2rem;
-
-  margin-top: 2.4rem;
 
   background-color: ${({ theme }) => theme.colors.darkBlue};
   border-radius: 4px;
@@ -42,9 +40,5 @@ export const Player = styled.div`
     color: ${({ theme }) => theme.colors.lightBlue};
     font-size: 3.2rem;
     margin: 0.4rem 1.4rem;
-  }
-
-  div:last-child {
-    margin-bottom: 0.8rem;
   }
 `;

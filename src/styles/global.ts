@@ -18,17 +18,14 @@ export default createGlobalStyle`${css`
   }
 
   html,
-  body {
+  body,
+  #root {
     width: 100%;
     height: 100vh;
 
     font-size: 1.6rem;
     font-weight: 400;
     font-family: "Roboto", sans-serif;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     background-color: ${({ theme }) => theme.colors.blue};
   }

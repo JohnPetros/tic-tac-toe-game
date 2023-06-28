@@ -16,7 +16,7 @@ export function Scoreboard() {
           <small>{playerX.name}</small>
         </div>
         <strong>{playerX.score}</strong>
-        <X size={2.4} />
+        <X size={2} />
       </Player>
 
       <Player>
@@ -25,7 +25,7 @@ export function Scoreboard() {
           <small>{playerO.name}</small>
         </div>
         <strong>{playerO.score}</strong>
-        <O size={2.4} />
+        <O size={2} />
       </Player>
     </Container>
   );

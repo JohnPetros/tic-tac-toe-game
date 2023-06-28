@@ -1,8 +1,11 @@
 import { styled } from "styled-components";
 
 export const Container = styled.main`
-  width: 100%;
-  height: 100vh;
+  width: max-content;
+  margin: 0 auto;
+  padding-top: 2.4rem;
 
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
