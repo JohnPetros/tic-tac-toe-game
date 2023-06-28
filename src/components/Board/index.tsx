@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Container, Cell, X, O, EndGameLine } from "./styles";
 import { CurrentMark } from "../Game";
 import { Combinations, board } from "../../utils/board";
+export const GAP_SIZE = 8;
 
 interface BoardProps {
   currentMark: CurrentMark;
@@ -26,9 +27,11 @@ const markComponent: MarkComponent = {
 export function Board({ currentMark, changeMark }: BoardProps) {
   const [cells, setCells] = useState<CellData[]>([]);
   const [winningCombination, setWinnigCombination] =
-    useState<Combinations>("secondDiagonal");
-  const [isEndGameLineVisible, setIsEndGameLineVisible] = useState(false);
+    useState<Combinations>("firstColumn");
+  const [isEndGameLineVisible, setIsEndGameLineVisible] = useState(true);
   const cellRef = useRef<HTMLDivElement>(null);
+  const cellSize = useRef(0);
+  const lineWidth = useRef(0);
 
   function checkCombination(index: number) {
     return cells[index - 1].mark === currentMark;
@@ -47,7 +50,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
   }
 
   function markCell(id: number, mark: CurrentMark, canMark: boolean = true) {
-    const markedCell = cells.find((cell) => cell.id === id) ?? cells[0];
+    const markedCell = cells.find((cell) => cell.id === id)!;
 
     markedCell.mark = mark;
     markedCell.isMarked = canMark;
@@ -74,7 +77,8 @@ export function Board({ currentMark, changeMark }: BoardProps) {
 
   useEffect(() => {
     if (cellRef.current) {
-      console.log(cellRef.current.clientWidth);
+      cellSize.current = cellRef.current.clientWidth;
+      lineWidth.current = cellSize.current * 3 + GAP_SIZE * 2;
     }
   }, [cellRef.current]);
 
@@ -99,7 +103,17 @@ export function Board({ currentMark, changeMark }: BoardProps) {
       {isEndGameLineVisible && (
         <EndGameLine
           winningCombination={winningCombination}
-          cellSize={cellRef?.current?.clientWidth ?? 109}
+          cellSize={cellSize.current}
+          animate={{
+            width: [
+              0,
+              winningCombination === "firstDiagonal" ||
+              winningCombination === "secondDiagonal"
+                ? lineWidth.current + cellSize.current + GAP_SIZE * 4
+                : lineWidth.current,
+            ],
+          }}
+          transition={{ width: { duration: 0.1 } }}
         />
       )}
     </Container>

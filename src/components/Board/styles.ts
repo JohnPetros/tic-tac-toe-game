@@ -1,4 +1,5 @@
 import { css, styled } from "styled-components";
+import { motion } from "framer-motion";
 import { Combinations } from "../../utils/board";
 const GAP_SIZE = 8;
 
@@ -84,67 +85,64 @@ interface EndGameLine {
   cellSize: number;
 }
 
-export const EndGameLine = styled.div<EndGameLine>`
+export const EndGameLine = styled(motion.div)<EndGameLine>`
   position: absolute;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.yellow};
   height: 1.2rem;
+  transition: width 2s;
 
   ${({ winningCombination, cellSize }) => {
-    const lineWidth = cellSize * 3 + GAP_SIZE * 2;
     const lineHeight = 12;
     switch (winningCombination) {
       case "firstRow":
         return css`
-          width: ${lineWidth}px;
           top: ${cellSize / 2 + GAP_SIZE}px;
           left: ${GAP_SIZE}px;
         `;
       case "secondRow":
         return css`
-          width: ${lineWidth}px;
           top: ${cellSize * 2 - cellSize / 2 + GAP_SIZE * 2}px;
           left: ${GAP_SIZE}px;
         `;
       case "thirdRow":
         return css`
-          width: ${lineWidth}px;
           top: ${cellSize * 3 - cellSize / 2 + GAP_SIZE * 2 + lineHeight / 2}px;
           left: ${GAP_SIZE}px;
         `;
       case "firstColumn":
         return css`
-          width: ${lineWidth}px;
-          top: ${lineWidth / 2 + GAP_SIZE / 2}px;
-          left: -${cellSize - GAP_SIZE + lineHeight / 2}px;
+          top: ${GAP_SIZE / 2}px;
+          left: ${cellSize / 2 + GAP_SIZE}px;
+          transform-origin: left center;
           transform: rotate(90deg);
         `;
       case "secondColumn":
         return css`
-          width: ${lineWidth}px;
-          top: ${lineWidth / 2 + GAP_SIZE / 2}px;
-          left: ${GAP_SIZE}px;
+          top: ${GAP_SIZE / 2}px;
+          left: ${cellSize + cellSize / 2 + GAP_SIZE * 2}px;
+          transform-origin: left center;
           transform: rotate(90deg);
         `;
       case "thirdColumn":
         return css`
-          width: ${lineWidth}px;
-          top: ${lineWidth / 2 + GAP_SIZE / 2}px;
-          left: ${cellSize + GAP_SIZE * 2}px;
+          top: ${GAP_SIZE / 2}px;
+          left: ${cellSize * 2 + cellSize / 2 + GAP_SIZE * 3}px;
+          transform-origin: left center;
           transform: rotate(90deg);
         `;
       case "firstDiagonal":
         return css`
-          width: ${lineWidth + cellSize + GAP_SIZE * 4}px;
-          top: ${cellSize + cellSize / 2 + GAP_SIZE}px;
-          left: -${cellSize / 2 + GAP_SIZE}px;
+          top: ${GAP_SIZE / 2}px;
+          left: ${GAP_SIZE}px;
+          transform-origin: left center;
           transform: rotate(45deg);
         `;
       case "secondDiagonal":
         return css`
-          width: ${lineWidth + cellSize + GAP_SIZE * 4}px;
           top: ${cellSize + cellSize / 2 + GAP_SIZE}px;
           left: -${cellSize / 2 + GAP_SIZE}px;
+          transform-origin: left center;
           transform: rotate(-45deg);
         `;
     }
