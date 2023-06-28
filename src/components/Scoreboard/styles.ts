@@ -9,7 +9,7 @@ export const Container = styled.div`
     margin-top: 4px;
     text-align: center;
     font-weight: 500;
-    color: ${({ theme }) => theme.colors.green};
+    color: ${({ theme }) => theme.colors.yellow};
   }
 `;
 
@@ -23,20 +23,21 @@ export const Player = styled.div<Player>`
   align-items: center;
 
   width: 14rem;
-  padding: 1.2rem 0 0.8rem;
+  padding: 0.8rem 0 0;
 
   background-color: ${({ theme }) => theme.colors.darkBlue};
 
   border: 4px solid transparent;
   border-color: ${({ theme, isCurrentPlayer }) =>
-    theme.colors[isCurrentPlayer ? "lightBlue" : "transparent"]};
+    theme.colors[isCurrentPlayer ? "yellow" : "transparent"]};
   border-radius: 8px;
 
-  div:first-child {
+  div:nth-child(2) {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.4rem;
+    margin: 1.2rem 0.8rem;
   }
 
   img {

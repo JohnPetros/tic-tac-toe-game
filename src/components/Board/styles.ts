@@ -16,7 +16,11 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-export const Cell = styled.div`
+interface Cell {
+  isMarked: boolean;
+}
+
+export const Cell = styled.div<Cell>`
   background: ${({ theme }) => theme.colors.darkBlue};
   border-radius: 8px;
   display: grid;
@@ -24,6 +28,10 @@ export const Cell = styled.div`
 
   &:hover {
     cursor: pointer;
+  }
+
+  > div {
+    opacity: ${({ isMarked }) => (isMarked ? 1 : 0.4)};
   }
 `;
 
