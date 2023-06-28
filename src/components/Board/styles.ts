@@ -5,7 +5,7 @@ export const Container = styled.div`
   width: 36rem;
   height: 36rem;
   border-radius: 8px;
-  margin-top: 5.6rem;
+  margin-top: 4rem;
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);

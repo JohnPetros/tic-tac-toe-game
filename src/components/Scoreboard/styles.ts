@@ -1,21 +1,36 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
   gap: 7.2rem;
+
+  span {
+    display: block;
+    margin-top: 4px;
+    text-align: center;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.green};
+  }
 `;
 
-export const Player = styled.div`
+interface Player {
+  isCurrentPlayer: boolean;
+}
+
+export const Player = styled.div<Player>`
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  width: 12rem;
-  /* height: 16rem; */
-  padding: 1.2rem;
+  width: 14rem;
+  padding: 1.2rem 0 0.8rem;
 
   background-color: ${({ theme }) => theme.colors.darkBlue};
-  border-radius: 4px;
+
+  border: 4px solid transparent;
+  border-color: ${({ theme, isCurrentPlayer }) =>
+    theme.colors[isCurrentPlayer ? "lightBlue" : "transparent"]};
+  border-radius: 8px;
 
   div:first-child {
     display: flex;
