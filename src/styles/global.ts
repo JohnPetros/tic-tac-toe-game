@@ -32,6 +32,13 @@ export default createGlobalStyle`${css`
   button {
     border: none;
     cursor: pointer;
+
+    transition: opacity 0.2s;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 
   a {

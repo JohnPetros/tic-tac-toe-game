@@ -3,6 +3,7 @@ import { ReactNode, createContext, useContext, useReducer } from "react";
 export interface Player {
   name: string;
   score: number;
+  avatar: string;
 }
 
 interface GameState {
@@ -55,8 +56,8 @@ const GameContext = createContext({} as Context);
 const initialState: GameState = {
   mode: "single-player",
   difficulty: "easy",
-  playerX: { name: "", score: 0 },
-  playerO: { name: "", score: 0 },
+  playerX: { name: "", score: 0, avatar: "" },
+  playerO: { name: "", score: 0, avatar: "" },
   isGameModaVisible: true,
 };
 

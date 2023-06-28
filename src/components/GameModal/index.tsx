@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { useGame, GameActions, Player } from "../../hooks/useGame";
 import { Container, Content } from "./styles";
+import { getAvatar } from "../../utils/getAvatar";
 
 type FormStep = "mode" | "single-player" | "multiplayer" | "difficulty";
 
@@ -23,8 +24,6 @@ export function GameModal() {
   }
 
   function changeForm(step: FormStep) {
-    setFormStep(step);
-
     switch (step) {
       case "mode":
         setTitle("Choose the mode");
@@ -41,6 +40,8 @@ export function GameModal() {
       default:
         setTitle("Set the form type");
     }
+
+    setFormStep(step);
   }
 
   function handleModeButtonClick(mode: FormStep) {
@@ -55,11 +56,15 @@ export function GameModal() {
     let playerX, playerO;
 
     if (singlePlayerType === "x") {
-      playerX = { name: singlePlayerName, score: 0 };
-      playerO = { name: `Bot ${difficulty}`, score: 0 };
+      playerX = { name: singlePlayerName, score: 0, avatar: getAvatar() };
+      playerO = {
+        name: `Bot ${difficulty}`,
+        score: 0,
+        avatar: getAvatar(true),
+      };
     } else {
-      playerX = { name: `Bot ${difficulty}`, score: 0 };
-      playerO = { name: singlePlayerName, score: 0 };
+      playerX = { name: `Bot ${difficulty}`, score: 0, avatar: getAvatar() };
+      playerO = { name: singlePlayerName, score: 0, avatar: getAvatar() };
     }
 
     setPlayers({ playerX, playerO });
@@ -67,15 +72,15 @@ export function GameModal() {
   }
 
   function handleMultiplayerFormButtonClick() {
-    const playerX = { name: playerXName, score: 0 };
-    const playerO = { name: playerOName, score: 0 };
+    const playerX = { name: playerXName, score: 0, avatar: getAvatar() };
+    const playerO = { name: playerOName, score: 0, avatar: getAvatar() };
 
     setPlayers({ playerX, playerO });
     closeModal();
   }
 
   function handleSinglePlayerFormButtonClick() {
-    setFormStep("difficulty");
+    changeForm("difficulty");
   }
 
   if (!state.isGameModaVisible) return;
@@ -120,7 +125,11 @@ export function GameModal() {
               onChange={({ target }) => setPlayerOName(target.value)}
             />
 
-            <Button title="Play" onClick={handleMultiplayerFormButtonClick} />
+            <Button
+              title="Play"
+              isDisabled={!playerXName || !playerOName}
+              onClick={handleMultiplayerFormButtonClick}
+            />
           </>
         )}
 
@@ -161,6 +170,7 @@ export function GameModal() {
 
             <Button
               title="Set difficulty"
+              isDisabled={!singlePlayerName || !singlePlayerType}
               onClick={handleSinglePlayerFormButtonClick}
             />
           </>
