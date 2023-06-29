@@ -11,6 +11,26 @@ export const Container = styled.div`
     font-weight: 500;
     color: ${({ theme }) => theme.colors.yellow};
   }
+
+  > div {
+    position: relative;
+  }
+`;
+
+export const PlayerBoard = styled.div`
+  position: relative;
+
+  > div:nth-child(2) {
+    height: 2.4rem;
+    display: flex;
+    justify-content: center;
+
+    #lottie {
+      width: 8rem;
+      height: 8rem;
+      transform: translateY(-2rem);
+    }
+  }
 `;
 
 interface Player {

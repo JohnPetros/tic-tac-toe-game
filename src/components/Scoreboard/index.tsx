@@ -1,6 +1,11 @@
 import { useGame, Mark } from "../../hooks/useGame";
 import { O, X } from "../Board/styles";
-import { Container, Player } from "./styles";
+import {
+  Player as Animation,
+  Controls,
+} from "@lottiefiles/react-lottie-player";
+import { Container, PlayerBoard, Player } from "./styles";
+import Loading from "../../assets/animations/loading.json";
 
 interface BoardProps {
   currentMark: Mark;
@@ -13,7 +18,7 @@ export function Scoreboard({ currentMark }: BoardProps) {
 
   return (
     <Container>
-      <div>
+      <PlayerBoard>
         <Player isCurrentMark={currentMark === "x"}>
           <X size={2} />
           <div>
@@ -29,16 +34,18 @@ export function Scoreboard({ currentMark }: BoardProps) {
           </div>
           <strong>{playerX.score}</strong>
         </Player>
-        {currentMark === "x" && !playerX.isBot ? (
-          <span>Your Turn</span>
-        ) : currentMark === "x" && isBotTurn ? (
-          "bot turn"
-        ) : (
-          ""
-        )}
-      </div>
+        <div>
+          {currentMark === "x" && !playerX.isBot ? (
+            <span>Your Turn</span>
+          ) : currentMark === "x" && isBotTurn ? (
+            "bot turn"
+          ) : (
+            ""
+          )}
+        </div>
+      </PlayerBoard>
 
-      <div>
+      <PlayerBoard>
         <Player isCurrentMark={currentMark === "o"}>
           <O size={2} />
           <div>
@@ -54,14 +61,16 @@ export function Scoreboard({ currentMark }: BoardProps) {
           </div>
           <strong>{playerO.score}</strong>
         </Player>
-        {currentMark === "x" && !playerO.isBot ? (
-          <span>Your Turn</span>
-        ) : isBotTurn && playerO.isBot ? (
-          "bot turn"
-        ) : (
-          ""
-        )}
-      </div>
+        <div>
+          {currentMark === "x" && !playerO.isBot ? (
+            <span>Your Turn</span>
+          ) : isBotTurn && playerO.isBot ? (
+            <Animation autoplay loop src={Loading}></Animation>
+          ) : (
+            ""
+          )}
+        </div>
+      </PlayerBoard>
     </Container>
   );
 }
