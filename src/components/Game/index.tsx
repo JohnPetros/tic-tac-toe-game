@@ -33,6 +33,7 @@ export function Game() {
       dispatch({ type: GameActions.incrementScore, payload: playerO });
     }
     setWinner(null);
+    changeMark();
     dispatch({ type: GameActions.setIsGameEnd, payload: false });
   }
 
@@ -45,7 +46,7 @@ export function Game() {
   useEffect(() => {
     if (isGameEnd) {
       const winnerPlayer = getCurrentPlayer(currentMark);
-      timer = setTimeout(() => setWinner(winnerPlayer), 2000);
+      timer = setTimeout(() => setWinner(winnerPlayer), hasDraw ? 500 : 2000);
     }
     return () => clearTimeout(timer);
   }, [isGameEnd]);

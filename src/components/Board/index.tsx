@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Container, Cell, X, O, EndGameLine } from "./styles";
 import { Combinations, board } from "../../utils/board";
 import { GameActions, Mark, useGame } from "../../hooks/useGame";
-import { CellSignalMedium } from "@phosphor-icons/react";
 export const GAP_SIZE = 8;
 
 interface BoardProps {
@@ -105,15 +104,19 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     return cells[randomIndex];
   }
 
+  function getValidRandomCell() {
+    let randomCell = getRandomCell();
+    while (randomCell.mark !== "") {
+      randomCell = getRandomCell();
+    }
+    return randomCell;
+  }
+
   function markRandomCell() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        let randomCell = getRandomCell();
-        while (randomCell.mark !== "") {
-          randomCell = getRandomCell();
-          if (!randomCell?.id) reject("Fail to get a random cell");
-        }
-        console.log("random", randomCell.id);
+        const randomCell = getValidRandomCell();
+        if (!randomCell?.id) reject("Fail to get a random cell");
         markCell(randomCell.id, currentMark);
         resolve(true);
       }, 1000);
@@ -122,39 +125,48 @@ export function Board({ currentMark, changeMark }: BoardProps) {
 
   function getBestCell() {
     let bestIndex = null;
-
-    for (const combination of Object.values(board)) {
-      if (
-        cells[combination[0]].mark === cells[combination[1]].mark &&
-        cells[combination[0]].mark !== cells[combination[2]].mark &&
-        cells[combination[2]].mark === ""
-      ) {
-        bestIndex = combination[2];
-        console.log(cells[bestIndex]);
-      } else if (
-        cells[combination[0]].mark === cells[combination[2]].mark &&
-        cells[combination[0]].mark !== cells[combination[1]].mark &&
-        cells[combination[1]].mark === ""
-      ) {
-        bestIndex = combination[1];
-        console.log(cells[bestIndex]);
-      } else if (
-        cells[combination[1]].mark === cells[combination[2]].mark &&
-        cells[combination[1]].mark !== cells[combination[0]].mark &&
-        cells[combination[0]].mark === ""
-      ) {
-        bestIndex = combination[0];
-        console.log(cells[bestIndex]);
+    const marks = currentMark === "o" ? ["o", "x"] : ["x", "o"];
+    for (const mark of marks) {
+      if (bestIndex) break;
+      for (const combination of Object.values(board)) {
+        if (
+          cells[combination[0]].mark === mark &&
+          cells[combination[0]].mark === cells[combination[1]].mark &&
+          cells[combination[0]].mark !== cells[combination[2]].mark &&
+          cells[combination[2]].mark === ""
+        ) {
+          bestIndex = combination[2];
+          console.log(cells[bestIndex]);
+          break;
+        } else if (
+          cells[combination[0]].mark === mark &&
+          cells[combination[0]].mark === cells[combination[2]].mark &&
+          cells[combination[0]].mark !== cells[combination[1]].mark &&
+          cells[combination[1]].mark === ""
+        ) {
+          bestIndex = combination[1];
+          console.log(cells[bestIndex]);
+          break;
+        } else if (
+          cells[combination[2]].mark === mark &&
+          cells[combination[1]].mark === cells[combination[2]].mark &&
+          cells[combination[1]].mark !== cells[combination[0]].mark &&
+          cells[combination[0]].mark === ""
+        ) {
+          bestIndex = combination[0];
+          console.log(cells[bestIndex]);
+          break;
+        }
       }
     }
-    return bestIndex ? cells[bestIndex] : getRandomCell();
+
+    return bestIndex ? cells[bestIndex] : getValidRandomCell();
   }
 
   function markBestCell() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const bestCell = getBestCell();
-        // console.log(bestCell);
 
         if (bestCell?.id) {
           markCell(bestCell.id, currentMark);
