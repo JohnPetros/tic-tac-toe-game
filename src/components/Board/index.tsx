@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Container, Cell, X, O, EndGameLine } from "./styles";
-import { CurrentMark } from "../Game";
 import { Combinations, board } from "../../utils/board";
-import { GameActions, useGame } from "../../hooks/useGame";
+import { GameActions, Mark, useGame } from "../../hooks/useGame";
 export const GAP_SIZE = 8;
 
 interface BoardProps {
-  currentMark: CurrentMark;
+  currentMark: Mark;
   changeMark: () => void;
 }
 
 export interface CellData {
   id: number;
-  mark: CurrentMark;
+  mark: Mark;
   isMarked: boolean;
 }
 
@@ -50,7 +49,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     });
   }
 
-  function markCell(id: number, mark: CurrentMark, canMark: boolean = true) {
+  function markCell(id: number, mark: Mark, canMark: boolean = true) {
     const markedCell = cells.find((cell) => cell.id === id)!;
 
     markedCell.mark = mark;

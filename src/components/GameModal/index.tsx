@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGame, GameActions, Player, Mark } from "../../hooks/useGame";
 import { Button } from "../Button";
-import { useGame, GameActions, Player } from "../../hooks/useGame";
-import { Container, Content } from "./styles";
 import { getAvatar } from "../../utils/getAvatar";
+import { Container, Content } from "./styles";
 
 type FormStep = "mode" | "single-player" | "multiplayer" | "difficulty";
 
@@ -13,7 +13,7 @@ export function GameModal() {
   const [playerXName, setPlayerXName] = useState("");
   const [playerOName, setPlayerOName] = useState("");
   const [singlePlayerName, setSinglePlayerName] = useState("");
-  const [singlePlayerType, setSinglePlayerType] = useState<"" | "x" | "o">("x");
+  const [singlePlayerType, setSinglePlayerType] = useState<Mark>("x");
 
   function setPlayers(players: { playerX: Player; playerO: Player }) {
     dispatch({ type: GameActions.setPlayers, payload: players });
@@ -26,7 +26,7 @@ export function GameModal() {
     setPlayerXName("");
     setPlayerOName("");
     setSinglePlayerName("");
-    setSinglePlayerType("");
+    setSinglePlayerType("x");
   }
 
   function changeForm(step: FormStep) {

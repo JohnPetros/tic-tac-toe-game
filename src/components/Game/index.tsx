@@ -4,14 +4,12 @@ import { Scoreboard } from "../Scoreboard";
 import { Container, EndGameMessage } from "./styles";
 import { Overlay } from "../Overlay";
 import { Button } from "../Button";
-import { GameActions, Player, useGame } from "../../hooks/useGame";
+import { GameActions, Mark, Player, useGame } from "../../hooks/useGame";
 let timer = 0;
 
-export type CurrentMark = "" | "x" | "o";
-
 export function Game() {
-  const { state, dispatch } = useGame();
-  const [currentMark, setCurrentMark] = useState<CurrentMark>("x");
+  const { state, dispatch, getCurrentPlayer } = useGame();
+  const [currentMark, setCurrentMark] = useState<Mark>("x");
   const [winner, setWinner] = useState<Player | null>(null);
 
   function changeMark() {
@@ -42,9 +40,10 @@ export function Game() {
 
   useEffect(() => {
     if (state.isGameEnd) {
-      const winnerPlayer = `player${currentMark.toUpperCase()}`;
-      setTimeout(() => setWinner(state[winnerPlayer]), 2000);
+      const winnerPlayer = getCurrentPlayer(currentMark);
+      timer = setTimeout(() => setWinner(winnerPlayer), 2000);
     }
+    return () => clearTimeout(timer);
   }, [state.isGameEnd]);
 
   return (

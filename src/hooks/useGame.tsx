@@ -29,6 +29,7 @@ export enum GameActions {
   setDifficulty,
   setPlayers,
   setIsGameEnd,
+  getCurrentPlayer,
   incrementScore,
   resetGame,
 }
@@ -38,9 +39,12 @@ interface Action {
   payload?: any;
 }
 
+export type Mark = "" | "x" | "o";
+
 interface Context {
   state: GameState;
   dispatch: (action: Action) => void;
+  getCurrentPlayer: (mark: Mark) => Player;
 }
 
 function GameReducer(state: GameState, action: Action) {
@@ -78,8 +82,13 @@ const initialState: GameState = {
 
 export function GameProvider({ children }: GameProviderProps) {
   const [state, dispatch] = useReducer(GameReducer, initialState);
-  const value = { state, dispatch };
 
+  function getCurrentPlayer(mark: Mark): Player {
+    const player = `player${mark.toUpperCase()}`;
+    return state[player];
+  }
+
+  const value = { state, dispatch, getCurrentPlayer };
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
