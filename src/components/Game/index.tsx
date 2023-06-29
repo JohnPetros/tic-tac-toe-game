@@ -8,7 +8,11 @@ import { Container, EndGameMessage } from "./styles";
 let timer = 0;
 
 export function Game() {
-  const { state, dispatch, getCurrentPlayer } = useGame();
+  const {
+    state: { isGameEnd, hasDraw },
+    dispatch,
+    getCurrentPlayer,
+  } = useGame();
   const [currentMark, setCurrentMark] = useState<Mark>("x");
   const [winner, setWinner] = useState<Player | null>(null);
 
@@ -19,11 +23,11 @@ export function Game() {
   function handlePlayAgainButtonClick() {
     if (!winner) return;
 
-    if (currentMark === "x") {
+    if (!hasDraw && currentMark === "x") {
       const playerX = winner;
       playerX.score = winner.score + 1;
       dispatch({ type: GameActions.incrementScore, payload: playerX });
-    } else {
+    } else if (!hasDraw && currentMark === "o") {
       const playerO = winner;
       playerO.score = winner.score + 1;
       dispatch({ type: GameActions.incrementScore, payload: playerO });
@@ -39,26 +43,23 @@ export function Game() {
   }
 
   useEffect(() => {
-    if (state.isGameEnd) {
+    if (isGameEnd) {
       const winnerPlayer = getCurrentPlayer(currentMark);
       timer = setTimeout(() => setWinner(winnerPlayer), 2000);
     }
     return () => clearTimeout(timer);
-  }, [state.isGameEnd]);
+  }, [isGameEnd]);
 
   return (
     <Container>
       <Scoreboard currentMark={currentMark} />
-      <Board
-        currentMark={currentMark}
-        changeMark={changeMark}
-      />
+      <Board currentMark={currentMark} changeMark={changeMark} />
 
-      {state.isGameEnd && winner && (
+      {isGameEnd && winner && (
         <Overlay>
           <EndGameMessage>
             <p>
-              {state.hasDraw ? (
+              {hasDraw ? (
                 <strong>Draw!</strong>
               ) : (
                 <>

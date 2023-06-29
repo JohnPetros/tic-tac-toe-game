@@ -58,6 +58,7 @@ export const Player = styled.div<Player>`
     flex-direction: column;
     gap: 0.4rem;
     margin: 1.2rem 0.8rem;
+    height: 7.2rem;
   }
 
   img {

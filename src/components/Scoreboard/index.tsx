@@ -35,7 +35,7 @@ export function Scoreboard({ currentMark }: BoardProps) {
           {currentMark === "x" && !playerX.isBot ? (
             <span>Your Turn</span>
           ) : currentMark === "x" && isBotTurn ? (
-            "bot turn"
+            <Animation autoplay loop src={Loading}></Animation>
           ) : (
             ""
           )}
@@ -59,7 +59,7 @@ export function Scoreboard({ currentMark }: BoardProps) {
           <strong>{playerO.score}</strong>
         </Player>
         <div>
-          {currentMark === "x" && !playerO.isBot ? (
+          {currentMark === "o" && !playerO.isBot ? (
             <span>Your Turn</span>
           ) : isBotTurn && playerO.isBot ? (
             <Animation autoplay loop src={Loading}></Animation>

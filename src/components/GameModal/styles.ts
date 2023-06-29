@@ -25,6 +25,14 @@ export const Container = styled.div`
   }
 `;
 
+export const BackButton = styled.button`
+  background-color: transparent;
+  transform: translateY(-8px);
+  svg {
+    color: ${({ theme }) => theme.colors.green};
+  }
+`;
+
 export const Content = styled.div`
   background-color: ${({ theme }) => theme.colors.darkBlue};
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
@@ -39,7 +47,7 @@ export const Content = styled.div`
 
   h2 {
     text-align: center;
-    margin-bottom: 2.4rem;
+    margin-bottom: 1.2rem;
   }
 
   button + button {

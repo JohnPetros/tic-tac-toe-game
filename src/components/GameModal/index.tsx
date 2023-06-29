@@ -2,14 +2,21 @@ import { useState } from "react";
 import { useGame, GameActions, Player, Mark } from "../../hooks/useGame";
 import { Button } from "../Button";
 import { getAvatar } from "../../utils/getAvatar";
-import { Container, Content } from "./styles";
+import { Container, Content, BackButton } from "./styles";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 type FormStep = "mode" | "single-player" | "multiplayer" | "difficulty";
+const formSteps: FormStep[] = [
+  "mode",
+  "single-player",
+  "multiplayer",
+  "difficulty",
+];
 
 export function GameModal() {
   const { state, dispatch } = useGame();
   const [title, setTitle] = useState("Choose the game mode");
-  const [formStep, setFormStep] = useState<FormStep>("mode");
+  const [currentFormStep, setCurrentFormStep] = useState<FormStep>("mode");
   const [playerXName, setPlayerXName] = useState("");
   const [playerOName, setPlayerOName] = useState("");
   const [singlePlayerName, setSinglePlayerName] = useState("");
@@ -22,14 +29,14 @@ export function GameModal() {
   function closeModal() {
     dispatch({ type: GameActions.setIsGameModaVisible, payload: false });
     setTitle("Choose the game mode");
-    setFormStep("mode");
+    setCurrentFormStep("mode");
     setPlayerXName("");
     setPlayerOName("");
     setSinglePlayerName("");
     setSinglePlayerType("x");
   }
 
-  function changeForm(step: FormStep) {
+  function changeFormStep(step: FormStep) {
     switch (step) {
       case "mode":
         setTitle("Choose the mode");
@@ -47,13 +54,18 @@ export function GameModal() {
         setTitle("Set the form type");
     }
 
-    setFormStep(step);
+    setCurrentFormStep(step);
+  }
+
+  function handleBackFormStepClick() {
+    const previousFormStep = formSteps[formSteps.indexOf(currentFormStep) - 1];
+    changeFormStep(previousFormStep);
   }
 
   function handleModeButtonClick(mode: FormStep) {
     dispatch({ type: GameActions.setMode, payload: mode });
 
-    changeForm(mode);
+    changeFormStep(mode);
   }
 
   function handleDifficultyButtonClick(difficulty: string) {
@@ -63,7 +75,7 @@ export function GameModal() {
 
     if (singlePlayerType === "x") {
       playerX = {
-        name: singlePlayerName,
+        name: singlePlayerName.trim(),
         score: 0,
         avatar: getAvatar(),
         isBot: false,
@@ -82,7 +94,7 @@ export function GameModal() {
         isBot: true,
       };
       playerO = {
-        name: singlePlayerName,
+        name: singlePlayerName.trim(),
         score: 0,
         avatar: getAvatar(),
         isBot: false,
@@ -95,13 +107,13 @@ export function GameModal() {
 
   function handleMultiplayerFormButtonClick() {
     const playerX = {
-      name: playerXName,
+      name: playerXName.trim(),
       score: 0,
       avatar: getAvatar(),
       isBot: false,
     };
     const playerO = {
-      name: playerOName,
+      name: playerOName.trim(),
       score: 0,
       avatar: getAvatar(),
       isBot: false,
@@ -112,7 +124,7 @@ export function GameModal() {
   }
 
   function handleSinglePlayerFormButtonClick() {
-    changeForm("difficulty");
+    changeFormStep("difficulty");
   }
 
   if (!state.isGameModaVisible) return;
@@ -123,9 +135,14 @@ export function GameModal() {
         T<span>i</span>c <span>T</span>a<span>c</span> T<span>o</span>e
       </h1>
       <Content>
+        {formSteps.indexOf(currentFormStep) !== 0 && (
+          <BackButton onClick={handleBackFormStepClick}>
+            <ArrowLeft size={24} />
+          </BackButton>
+        )}
         <h2>{title}</h2>
 
-        {formStep === "mode" && (
+        {currentFormStep === "mode" && (
           <>
             <Button
               title="Single-Player"
@@ -138,7 +155,7 @@ export function GameModal() {
           </>
         )}
 
-        {formStep === "multiplayer" && (
+        {currentFormStep === "multiplayer" && (
           <>
             <label htmlFor="player-x-name">Player X:</label>
             <input
@@ -149,7 +166,7 @@ export function GameModal() {
               autoFocus
             />
 
-            <label htmlFor="player-x-name">Player Circle:</label>
+            <label htmlFor="player-x-name">Player O:</label>
             <input
               type="text"
               id="player-circle-name"
@@ -165,7 +182,7 @@ export function GameModal() {
           </>
         )}
 
-        {formStep === "single-player" && (
+        {currentFormStep === "single-player" && (
           <>
             <label htmlFor="player-x-name">Your name:</label>
             <input
@@ -208,7 +225,7 @@ export function GameModal() {
           </>
         )}
 
-        {formStep === "difficulty" && (
+        {currentFormStep === "difficulty" && (
           <>
             <Button
               title="Easy"
