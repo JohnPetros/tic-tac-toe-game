@@ -29,11 +29,13 @@ export enum GameActions {
   setDifficulty,
   setPlayers,
   setIsGameEnd,
+  incrementScore,
+  resetGame,
 }
 
 interface Action {
   type: GameActions;
-  payload: any;
+  payload?: any;
 }
 
 interface Context {
@@ -54,6 +56,10 @@ function GameReducer(state: GameState, action: Action) {
       return { ...state, playerX, playerO };
     case GameActions.setIsGameEnd:
       return { ...state, isGameEnd: action.payload };
+    case GameActions.incrementScore:
+      return { ...state, ...action.payload };
+    case GameActions.resetGame:
+      return initialState;
     default:
       return state;
   }

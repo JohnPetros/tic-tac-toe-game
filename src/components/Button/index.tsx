@@ -10,11 +10,17 @@ interface ButtonProps {
 export function Button({
   title,
   onClick,
-  isDisabled,
+  isDisabled = false,
   isAnimated = false,
 }: ButtonProps) {
   return (
-    <Container type="button" onClick={onClick} disabled={isDisabled}>
+    <Container
+      type="button"
+      onClick={onClick}
+      disabled={isDisabled}
+      animate={isAnimated ? { scale: [1, 1.08] } : {}}
+      transition={{ repeat: Infinity, repeatType: "mirror", duration: 0.5 }}
+    >
       {title}
     </Container>
   );

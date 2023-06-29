@@ -71,14 +71,18 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     }
   }
 
-  useEffect(() => {
+  function createCells() {
     let cells = [];
     for (let i = 1; i <= 9; i++) {
       const newCell: CellData = { id: i, mark: "", isMarked: false };
       cells.push(newCell);
     }
     setCells(cells);
-  }, []);
+  }
+
+  useEffect(() => {
+    if (!state.isGameEnd) createCells();
+  }, [state.isGameEnd]);
 
   useEffect(() => {
     if (cellRef.current) {
@@ -95,6 +99,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
             ref={id === 1 ? cellRef : null}
             key={id.toString()}
             isMarked={isMarked}
+            isMarkable={!state.isGameEnd}
             onClick={() => markCell(id, currentMark)}
             onMouseOver={() =>
               isMarked ? null : markCell(id, currentMark, false)

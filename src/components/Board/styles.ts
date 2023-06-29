@@ -23,6 +23,7 @@ export const Container = styled.div`
 
 interface Cell {
   isMarked: boolean;
+  isMarkable: boolean;
 }
 
 export const Cell = styled.div<Cell>`
@@ -30,7 +31,9 @@ export const Cell = styled.div<Cell>`
   border-radius: 8px;
   display: grid;
   place-content: center;
+  
 
+  pointer-events: ${({ isMarkable }) => isMarkable ? 'auto' : 'none' };
   &:hover {
     cursor: pointer;
   }
@@ -140,8 +143,8 @@ export const EndGameLine = styled(motion.div)<EndGameLine>`
         `;
       case "secondDiagonal":
         return css`
-          top: ${cellSize + cellSize / 2 + GAP_SIZE}px;
-          left: -${cellSize / 2 + GAP_SIZE}px;
+          top: ${cellSize * 3 + GAP_SIZE * 2}px;
+          left: ${GAP_SIZE}px;
           transform-origin: left center;
           transform: rotate(-45deg);
         `;

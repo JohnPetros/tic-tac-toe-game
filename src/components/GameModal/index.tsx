@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../Button";
 import { useGame, GameActions, Player } from "../../hooks/useGame";
 import { Container, Content } from "./styles";
@@ -21,6 +21,12 @@ export function GameModal() {
 
   function closeModal() {
     dispatch({ type: GameActions.setIsGameModaVisible, payload: false });
+    setTitle("Choose the game mode");
+    setFormStep("mode");
+    setPlayerXName("");
+    setPlayerOName("");
+    setSinglePlayerName("");
+    setSinglePlayerType("");
   }
 
   function changeForm(step: FormStep) {

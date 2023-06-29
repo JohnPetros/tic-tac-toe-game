@@ -28,6 +28,6 @@ export const EndGameMessage = styled.div`
   }
 
   button + button {
-    margin-top: 1.2rem;
+    margin-top: 2rem;
   }
 `;

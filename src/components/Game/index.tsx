@@ -4,12 +4,13 @@ import { Scoreboard } from "../Scoreboard";
 import { Container, EndGameMessage } from "./styles";
 import { Overlay } from "../Overlay";
 import { Button } from "../Button";
-import { GameState, Player, useGame } from "../../hooks/useGame";
+import { GameActions, Player, useGame } from "../../hooks/useGame";
+let timer = 0;
 
 export type CurrentMark = "" | "x" | "o";
 
 export function Game() {
-  const { state } = useGame();
+  const { state, dispatch } = useGame();
   const [currentMark, setCurrentMark] = useState<CurrentMark>("x");
   const [winner, setWinner] = useState<Player | null>(null);
 
@@ -17,16 +18,32 @@ export function Game() {
     setCurrentMark(currentMark === "x" ? "o" : "x");
   }
 
-  function handlePlayAgainButtonClick() {}
+  function handlePlayAgainButtonClick() {
+    if (!winner) return;
+
+    if (currentMark === "x") {
+      const playerX = winner;
+      playerX.score = winner.score + 1;
+      dispatch({ type: GameActions.incrementScore, payload: playerX });
+    } else {
+      const playerO = winner;
+      playerO.score = winner.score + 1;
+      dispatch({ type: GameActions.incrementScore, payload: playerO });
+    }
+    setWinner(null);
+    dispatch({ type: GameActions.setIsGameEnd, payload: false });
+  }
 
   function handleResetGameButtonClick() {
+    setWinner(null);
     setCurrentMark("x");
+    dispatch({ type: GameActions.resetGame });
   }
 
   useEffect(() => {
     if (state.isGameEnd) {
       const winnerPlayer = `player${currentMark.toUpperCase()}`;
-      setWinner(state[winnerPlayer]);
+      setTimeout(() => setWinner(state[winnerPlayer]), 2000);
     }
   }, [state.isGameEnd]);
 
@@ -35,14 +52,18 @@ export function Game() {
       <Scoreboard currentMark={currentMark} />
       <Board currentMark={currentMark} changeMark={changeMark} />
 
-      {state.isGameEnd && (
+      {state.isGameEnd && winner && (
         <Overlay>
           <EndGameMessage>
             <p>
               <strong>{winner?.name}</strong> wins! (Player{" "}
               {currentMark.toUpperCase()})
             </p>
-            <Button title="Play again" onClick={handlePlayAgainButtonClick} />
+            <Button
+              title="Play again"
+              onClick={handlePlayAgainButtonClick}
+              isAnimated
+            />
             <Button title="Reset game" onClick={handleResetGameButtonClick} />
           </EndGameMessage>
         </Overlay>

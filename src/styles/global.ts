@@ -2,12 +2,6 @@ import { createGlobalStyle, css } from "styled-components";
 
 export default createGlobalStyle`${css`
   :root {
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
-
     font-size: 62.5%;
   }
 
@@ -26,6 +20,12 @@ export default createGlobalStyle`${css`
     font-size: 1.6rem;
     font-weight: 400;
     font-family: "Roboto", sans-serif;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
 
     background-color: ${({ theme }) => theme.colors.blue};
   }
