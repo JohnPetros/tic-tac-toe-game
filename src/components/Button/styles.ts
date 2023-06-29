@@ -7,7 +7,7 @@ export const Container = styled(motion.button)`
   width: 100%;
   border-radius: 8px;
 
-  transition: background 0.2s;
+  transition: all 0.2s;
   color: ${({ theme }) => theme.colors.darkBlue};
   font-weight: 600;
   font-size: 1.6rem;

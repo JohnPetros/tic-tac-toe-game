@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { motion } from "framer-motion";
 
 export const Container = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
@@ -33,7 +34,7 @@ export const BackButton = styled.button`
   }
 `;
 
-export const Content = styled.div`
+export const Content = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.darkBlue};
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
   color: ${({ theme }) => theme.colors.white};

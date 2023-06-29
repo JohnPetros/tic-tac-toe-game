@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Container, Cell, X, O, EndGameLine } from "./styles";
 import { Combinations, board } from "../../utils/board";
 import { GameActions, Mark, useGame } from "../../hooks/useGame";
+import { CellSignalMedium } from "@phosphor-icons/react";
 export const GAP_SIZE = 8;
 
 interface BoardProps {
@@ -38,7 +39,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
   const lineWidth = useRef(0);
 
   function checkCombination(index: number) {
-    return cells[index - 1].mark === currentMark;
+    return cells[index].mark === currentMark;
   }
 
   function verifyWinner() {
@@ -105,15 +106,62 @@ export function Board({ currentMark, changeMark }: BoardProps) {
   }
 
   function markRandomCell() {
-    return new Promise<CellData>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
         let randomCell = getRandomCell();
         while (randomCell.mark !== "") {
           randomCell = getRandomCell();
+          if (!randomCell?.id) reject("Fail to get a random cell");
         }
+        console.log("random", randomCell.id);
         markCell(randomCell.id, currentMark);
-        resolve(randomCell);
-        reject("Fail to get random cell");
+        resolve(true);
+      }, 1000);
+    });
+  }
+
+  function getBestCell() {
+    let bestIndex = null;
+
+    for (const combination of Object.values(board)) {
+      if (
+        cells[combination[0]].mark === cells[combination[1]].mark &&
+        cells[combination[0]].mark !== cells[combination[2]].mark &&
+        cells[combination[2]].mark === ""
+      ) {
+        bestIndex = combination[2];
+        console.log(cells[bestIndex]);
+      } else if (
+        cells[combination[0]].mark === cells[combination[2]].mark &&
+        cells[combination[0]].mark !== cells[combination[1]].mark &&
+        cells[combination[1]].mark === ""
+      ) {
+        bestIndex = combination[1];
+        console.log(cells[bestIndex]);
+      } else if (
+        cells[combination[1]].mark === cells[combination[2]].mark &&
+        cells[combination[1]].mark !== cells[combination[0]].mark &&
+        cells[combination[0]].mark === ""
+      ) {
+        bestIndex = combination[0];
+        console.log(cells[bestIndex]);
+      }
+    }
+    return bestIndex ? cells[bestIndex] : getRandomCell();
+  }
+
+  function markBestCell() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const bestCell = getBestCell();
+        // console.log(bestCell);
+
+        if (bestCell?.id) {
+          markCell(bestCell.id, currentMark);
+          resolve(true);
+        } else {
+          reject("Fail to get the best cell");
+        }
       }, 1000);
     });
   }
@@ -122,13 +170,14 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     setIsBotTurn(true);
     try {
       if (difficulty === "easy") {
-        const randomCell: CellData = await markRandomCell();
-        markCell(randomCell.id, currentMark);
+        await markRandomCell();
+        setIsBotTurn(false);
+      } else {
+        await markBestCell();
         setIsBotTurn(false);
       }
     } catch (error) {
       console.error(error);
-    } finally {
     }
   }
 

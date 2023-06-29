@@ -6,11 +6,17 @@ import { Container, Content, BackButton } from "./styles";
 import { ArrowLeft } from "@phosphor-icons/react";
 
 type FormStep = "mode" | "single-player" | "multiplayer" | "difficulty";
-const formSteps: FormStep[] = [
-  "mode",
-  "single-player",
-  "multiplayer",
-  "difficulty",
+
+interface FormStepNavigation {
+  current: FormStep;
+  previous: FormStep | null;
+}
+
+const formSteps: FormStepNavigation[] = [
+  { current: "mode", previous: null },
+  { current: "single-player", previous: "mode" },
+  { current: "multiplayer", previous: "mode" },
+  { current: "difficulty", previous: "single-player" },
 ];
 
 export function GameModal() {
@@ -58,8 +64,10 @@ export function GameModal() {
   }
 
   function handleBackFormStepClick() {
-    const previousFormStep = formSteps[formSteps.indexOf(currentFormStep) - 1];
-    changeFormStep(previousFormStep);
+    const previousFormStep = formSteps.find(
+      (formStep) => formStep.current === currentFormStep
+    )?.previous;
+    if (previousFormStep) changeFormStep(previousFormStep);
   }
 
   function handleModeButtonClick(mode: FormStep) {
@@ -134,8 +142,8 @@ export function GameModal() {
       <h1>
         T<span>i</span>c <span>T</span>a<span>c</span> T<span>o</span>e
       </h1>
-      <Content>
-        {formSteps.indexOf(currentFormStep) !== 0 && (
+      <Content animate={{ y: [700, 0] }}>
+        {currentFormStep !== "mode" && (
           <BackButton onClick={handleBackFormStepClick}>
             <ArrowLeft size={24} />
           </BackButton>
