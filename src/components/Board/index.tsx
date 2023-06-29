@@ -133,7 +133,10 @@ export function Board({ currentMark, changeMark }: BoardProps) {
   }
 
   useEffect(() => {
-    if (!isGameEnd) createCells();
+    if (!isGameEnd) {
+      dispatch({ type: GameActions.setHasDraw, payload: false });
+      createCells();
+    }
   }, [isGameEnd]);
 
   useEffect(() => {
@@ -158,7 +161,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
             ref={id === 1 ? cellRef : null}
             key={id.toString()}
             isMarked={isMarked}
-            isMarkable={!isGameEnd && !isBotTurn}
+            isMarkable={!isMarked && !isGameEnd && !isBotTurn}
             onClick={() => markCell(id, currentMark)}
             onMouseOver={() =>
               isMarked ? null : markCell(id, currentMark, false)

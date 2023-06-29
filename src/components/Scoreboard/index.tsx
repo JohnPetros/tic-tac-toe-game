@@ -1,9 +1,6 @@
 import { useGame, Mark } from "../../hooks/useGame";
 import { O, X } from "../Board/styles";
-import {
-  Player as Animation,
-  Controls,
-} from "@lottiefiles/react-lottie-player";
+import { Player as Animation } from "@lottiefiles/react-lottie-player";
 import { Container, PlayerBoard, Player } from "./styles";
 import Loading from "../../assets/animations/loading.json";
 
