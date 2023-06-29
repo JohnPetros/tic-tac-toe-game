@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Board } from "../Board";
+import { GameActions, Mark, Player, useGame } from "../../hooks/useGame";
 import { Scoreboard } from "../Scoreboard";
-import { Container, EndGameMessage } from "./styles";
+import { Board } from "../Board";
 import { Overlay } from "../Overlay";
 import { Button } from "../Button";
-import { GameActions, Mark, Player, useGame } from "../../hooks/useGame";
+import { Container, EndGameMessage } from "./styles";
 let timer = 0;
 
 export function Game() {
@@ -49,14 +49,23 @@ export function Game() {
   return (
     <Container>
       <Scoreboard currentMark={currentMark} />
-      <Board currentMark={currentMark} changeMark={changeMark} />
+      <Board
+        currentMark={currentMark}
+        changeMark={changeMark}
+      />
 
       {state.isGameEnd && winner && (
         <Overlay>
           <EndGameMessage>
             <p>
-              <strong>{winner?.name}</strong> wins! (Player{" "}
-              {currentMark.toUpperCase()})
+              {state.hasDraw ? (
+                <strong>Draw!</strong>
+              ) : (
+                <>
+                  <strong>{winner?.name}</strong> wins! (Player{" "}
+                  {currentMark.toUpperCase()})
+                </>
+              )}
             </p>
             <Button
               title="Play again"

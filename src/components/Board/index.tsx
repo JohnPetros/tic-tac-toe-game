@@ -25,7 +25,11 @@ const markComponent: MarkComponent = {
 };
 
 export function Board({ currentMark, changeMark }: BoardProps) {
-  const { state, dispatch } = useGame();
+  const {
+    state: { mode, difficulty, isGameEnd, isBotTurn, hasDraw },
+    dispatch,
+    getCurrentPlayer,
+  } = useGame();
   const [cells, setCells] = useState<CellData[]>([]);
   const [winningCombination, setWinnigCombination] =
     useState<Combinations>("firstColumn");
@@ -49,6 +53,10 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     });
   }
 
+  function verifyDraw() {
+    return cells.every((cell) => cell.mark !== "");
+  }
+
   function markCell(id: number, mark: Mark, canMark: boolean = true) {
     const markedCell = cells.find((cell) => cell.id === id)!;
 
@@ -66,6 +74,14 @@ export function Board({ currentMark, changeMark }: BoardProps) {
         dispatch({ type: GameActions.setIsGameEnd, payload: hasWinner });
         return;
       }
+
+      const hasDraw = verifyDraw();
+      if (hasDraw) {
+        dispatch({ type: GameActions.setIsGameEnd, payload: hasDraw });
+        dispatch({ type: GameActions.setHasDraw, payload: hasDraw });
+        return;
+      }
+
       changeMark();
     }
   }
@@ -79,9 +95,53 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     setCells(cells);
   }
 
+  function setIsBotTurn(isBotTurn: boolean) {
+    dispatch({ type: GameActions.setIsBotTurn, payload: isBotTurn });
+  }
+
+  function getRandomCell() {
+    const randomIndex = Math.floor(Math.random() * cells.length);
+    return cells[randomIndex];
+  }
+
+  function markRandomCell() {
+    return new Promise<CellData>((resolve, reject) => {
+      setTimeout(() => {
+        let randomCell = getRandomCell();
+        while (randomCell.mark !== "") {
+          randomCell = getRandomCell();
+        }
+        markCell(randomCell.id, currentMark);
+        resolve(randomCell);
+        reject("Fail to get random cell");
+      }, 1000);
+    });
+  }
+
+  async function playAsBot() {
+    setIsBotTurn(true);
+    try {
+      if (difficulty === "easy") {
+        const randomCell: CellData = await markRandomCell();
+        markCell(randomCell.id, currentMark);
+        setIsBotTurn(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  }
+
   useEffect(() => {
-    if (!state.isGameEnd) createCells();
-  }, [state.isGameEnd]);
+    if (!isGameEnd) createCells();
+  }, [isGameEnd]);
+
+  useEffect(() => {
+    if (mode === "single-player" && !isGameEnd && !isBotTurn) {
+      const currentPlayer = getCurrentPlayer(currentMark);
+      if (currentPlayer.isBot && cells.length) playAsBot();
+    }
+  }, [currentMark, cells]);
 
   useEffect(() => {
     if (cellRef.current) {
@@ -98,7 +158,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
             ref={id === 1 ? cellRef : null}
             key={id.toString()}
             isMarked={isMarked}
-            isMarkable={!state.isGameEnd}
+            isMarkable={!isGameEnd && !isBotTurn}
             onClick={() => markCell(id, currentMark)}
             onMouseOver={() =>
               isMarked ? null : markCell(id, currentMark, false)
@@ -109,7 +169,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
           </Cell>
         );
       })}
-      {state.isGameEnd && (
+      {isGameEnd && !hasDraw && (
         <EndGameLine
           winningCombination={winningCombination}
           cellSize={cellSize.current}

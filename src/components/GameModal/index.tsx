@@ -57,20 +57,36 @@ export function GameModal() {
   }
 
   function handleDifficultyButtonClick(difficulty: string) {
-    dispatch({ type: GameActions.setMode, payload: difficulty });
+    dispatch({ type: GameActions.setDifficulty, payload: difficulty });
 
     let playerX, playerO;
 
     if (singlePlayerType === "x") {
-      playerX = { name: singlePlayerName, score: 0, avatar: getAvatar() };
+      playerX = {
+        name: singlePlayerName,
+        score: 0,
+        avatar: getAvatar(),
+        isBot: false,
+      };
       playerO = {
         name: `Bot ${difficulty}`,
         score: 0,
         avatar: getAvatar(true),
+        isBot: true,
       };
     } else {
-      playerX = { name: `Bot ${difficulty}`, score: 0, avatar: getAvatar() };
-      playerO = { name: singlePlayerName, score: 0, avatar: getAvatar() };
+      playerX = {
+        name: `Bot ${difficulty}`,
+        score: 0,
+        avatar: getAvatar(true),
+        isBot: true,
+      };
+      playerO = {
+        name: singlePlayerName,
+        score: 0,
+        avatar: getAvatar(),
+        isBot: false,
+      };
     }
 
     setPlayers({ playerX, playerO });
@@ -78,8 +94,18 @@ export function GameModal() {
   }
 
   function handleMultiplayerFormButtonClick() {
-    const playerX = { name: playerXName, score: 0, avatar: getAvatar() };
-    const playerO = { name: playerOName, score: 0, avatar: getAvatar() };
+    const playerX = {
+      name: playerXName,
+      score: 0,
+      avatar: getAvatar(),
+      isBot: false,
+    };
+    const playerO = {
+      name: playerOName,
+      score: 0,
+      avatar: getAvatar(),
+      isBot: false,
+    };
 
     setPlayers({ playerX, playerO });
     closeModal();

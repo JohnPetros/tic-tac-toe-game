@@ -1,16 +1,14 @@
-import { useGame } from "../../hooks/useGame";
+import { useGame, Mark } from "../../hooks/useGame";
 import { O, X } from "../Board/styles";
 import { Container, Player } from "./styles";
-import { CurrentMark } from "../Game";
 
 interface BoardProps {
-  currentMark: CurrentMark;
+  currentMark: Mark;
 }
 
 export function Scoreboard({ currentMark }: BoardProps) {
   const {
-    state: { playerX, playerO },
-    dispatch,
+    state: { playerX, playerO, isBotTurn },
   } = useGame();
 
   return (
@@ -31,7 +29,13 @@ export function Scoreboard({ currentMark }: BoardProps) {
           </div>
           <strong>{playerX.score}</strong>
         </Player>
-        {currentMark === "x" && <span>Your Turn</span>}
+        {currentMark === "x" && !playerX.isBot ? (
+          <span>Your Turn</span>
+        ) : currentMark === "x" && isBotTurn ? (
+          "bot turn"
+        ) : (
+          ""
+        )}
       </div>
 
       <div>
@@ -50,7 +54,13 @@ export function Scoreboard({ currentMark }: BoardProps) {
           </div>
           <strong>{playerO.score}</strong>
         </Player>
-        {currentMark === "o" && <span>Your Turn</span>}
+        {currentMark === "x" && !playerO.isBot ? (
+          <span>Your Turn</span>
+        ) : isBotTurn && playerO.isBot ? (
+          "bot turn"
+        ) : (
+          ""
+        )}
       </div>
     </Container>
   );

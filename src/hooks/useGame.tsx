@@ -4,6 +4,7 @@ export interface Player {
   name: string;
   score: number;
   avatar: string;
+  isBot: boolean;
 }
 
 type GameStateObject = {
@@ -17,6 +18,8 @@ export interface GameState extends GameStateObject {
   playerO: Player;
   isGameModaVisible: boolean;
   isGameEnd: boolean;
+  isBotTurn: boolean;
+  hasDraw: boolean;
 }
 
 interface GameProviderProps {
@@ -29,7 +32,8 @@ export enum GameActions {
   setDifficulty,
   setPlayers,
   setIsGameEnd,
-  getCurrentPlayer,
+  setHasDraw,
+  setIsBotTurn,
   incrementScore,
   resetGame,
 }
@@ -60,6 +64,10 @@ function GameReducer(state: GameState, action: Action) {
       return { ...state, playerX, playerO };
     case GameActions.setIsGameEnd:
       return { ...state, isGameEnd: action.payload };
+    case GameActions.setHasDraw:
+      return { ...state, hasDraw: action.payload };
+    case GameActions.setIsBotTurn:
+      return { ...state, isBotTurn: action.payload };
     case GameActions.incrementScore:
       return { ...state, ...action.payload };
     case GameActions.resetGame:
@@ -74,10 +82,12 @@ const GameContext = createContext({} as Context);
 const initialState: GameState = {
   mode: "single-player",
   difficulty: "easy",
-  playerX: { name: "", score: 0, avatar: "" },
-  playerO: { name: "", score: 0, avatar: "" },
+  playerX: { name: "", score: 0, avatar: "", isBot: false },
+  playerO: { name: "", score: 0, avatar: "", isBot: false },
   isGameModaVisible: true,
   isGameEnd: false,
+  isBotTurn: false,
+  hasDraw: false,
 };
 
 export function GameProvider({ children }: GameProviderProps) {
