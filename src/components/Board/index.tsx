@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Container, Cell, X, O, EndGameLine } from "./styles";
 import { CurrentMark } from "../Game";
 import { Combinations, board } from "../../utils/board";
+import { GameActions, useGame } from "../../hooks/useGame";
 export const GAP_SIZE = 8;
 
 interface BoardProps {
@@ -25,10 +26,10 @@ const markComponent: MarkComponent = {
 };
 
 export function Board({ currentMark, changeMark }: BoardProps) {
+  const { state, dispatch } = useGame();
   const [cells, setCells] = useState<CellData[]>([]);
   const [winningCombination, setWinnigCombination] =
     useState<Combinations>("firstColumn");
-  const [isEndGameLineVisible, setIsEndGameLineVisible] = useState(true);
   const cellRef = useRef<HTMLDivElement>(null);
   const cellSize = useRef(0);
   const lineWidth = useRef(0);
@@ -37,7 +38,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     return cells[index - 1].mark === currentMark;
   }
 
-  function hasWinner() {
+  function verifyWinner() {
     const combinations: Combinations[] = Object.keys(board) as Combinations[];
     return Object.values(board).some((combination, index) => {
       const isWinningCombination = combination.every(checkCombination);
@@ -61,8 +62,12 @@ export function Board({ currentMark, changeMark }: BoardProps) {
     );
 
     if (canMark) {
+      const hasWinner = verifyWinner();
+      if (hasWinner) {
+        dispatch({ type: GameActions.setIsGameEnd, payload: hasWinner });
+        return;
+      }
       changeMark();
-      setIsEndGameLineVisible(hasWinner());
     }
   }
 
@@ -100,7 +105,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
           </Cell>
         );
       })}
-      {isEndGameLineVisible && (
+      {state.isGameEnd && (
         <EndGameLine
           winningCombination={winningCombination}
           cellSize={cellSize.current}

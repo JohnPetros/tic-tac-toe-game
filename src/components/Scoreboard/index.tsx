@@ -19,7 +19,14 @@ export function Scoreboard({ currentMark }: BoardProps) {
         <Player isCurrentMark={currentMark === "x"}>
           <X size={2} />
           <div>
-            <img src={playerX.avatar} alt="Player X avatar" />
+            {playerX.avatar && (
+              <img
+                src={playerX.avatar}
+                alt="Player X avatar"
+                width={48}
+                height={48}
+              />
+            )}
             <small>{playerX.name}</small>
           </div>
           <strong>{playerX.score}</strong>
@@ -31,7 +38,14 @@ export function Scoreboard({ currentMark }: BoardProps) {
         <Player isCurrentMark={currentMark === "o"}>
           <O size={2} />
           <div>
-            <img src={playerO.avatar} alt="Player X avatar" />
+            {playerX.avatar && (
+              <img
+                src={playerO.avatar}
+                alt="Player X avatar"
+                width={48}
+                height={48}
+              />
+            )}
             <small>{playerO.name}</small>
           </div>
           <strong>{playerO.score}</strong>

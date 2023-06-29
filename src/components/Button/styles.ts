@@ -4,6 +4,7 @@ export const Container = styled.button`
   padding: 1.2rem;
   background-color: ${({ theme }) => theme.colors.green};
   width: 100%;
+  border-radius: 8px;
 
   transition: background 0.2s;
   color: ${({ theme }) => theme.colors.darkBlue};
@@ -13,7 +14,7 @@ export const Container = styled.button`
   &:hover {
     background: ${({ theme }) => theme.colors.lightBlue};
     color: ${({ theme }) => theme.colors.white};
-    border-radius: 4px;
+    border-radius: 2px;
   }
 
   &:focus {

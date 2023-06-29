@@ -33,6 +33,7 @@ export const Content = styled.div`
   width: 375px;
   max-width: 95%;
   padding: 3.2rem;
+  border-radius: 8px;
 
   font-weight: 500;
 

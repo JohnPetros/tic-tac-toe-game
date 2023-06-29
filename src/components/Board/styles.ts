@@ -102,7 +102,7 @@ export const EndGameLine = styled(motion.div)<EndGameLine>`
         `;
       case "secondRow":
         return css`
-          top: ${cellSize * 2 - cellSize / 2 + GAP_SIZE * 2}px;
+          top: ${cellSize * 2 - cellSize / 2 + GAP_SIZE}px;
           left: ${GAP_SIZE}px;
         `;
       case "thirdRow":

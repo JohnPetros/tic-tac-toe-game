@@ -6,12 +6,17 @@ export interface Player {
   avatar: string;
 }
 
-interface GameState {
+type GameStateObject = {
+  [key: string]: any;
+};
+
+export interface GameState extends GameStateObject {
   mode: "single-player" | "multiplayer";
   difficulty: "easy" | "hard";
   playerX: Player;
   playerO: Player;
   isGameModaVisible: boolean;
+  isGameEnd: boolean;
 }
 
 interface GameProviderProps {
@@ -23,6 +28,7 @@ export enum GameActions {
   setIsGameModaVisible,
   setDifficulty,
   setPlayers,
+  setIsGameEnd,
 }
 
 interface Action {
@@ -46,6 +52,8 @@ function GameReducer(state: GameState, action: Action) {
     case GameActions.setPlayers:
       const { playerX, playerO } = action.payload;
       return { ...state, playerX, playerO };
+    case GameActions.setIsGameEnd:
+      return { ...state, isGameEnd: action.payload };
     default:
       return state;
   }
@@ -59,6 +67,7 @@ const initialState: GameState = {
   playerX: { name: "", score: 0, avatar: "" },
   playerO: { name: "", score: 0, avatar: "" },
   isGameModaVisible: true,
+  isGameEnd: false,
 };
 
 export function GameProvider({ children }: GameProviderProps) {
