@@ -106,6 +106,7 @@ export function Board({ currentMark, changeMark }: BoardProps) {
 
   function getValidRandomCell() {
     let randomCell = getRandomCell();
+
     while (randomCell.mark !== "") {
       randomCell = getRandomCell();
     }
@@ -136,7 +137,6 @@ export function Board({ currentMark, changeMark }: BoardProps) {
           cells[combination[2]].mark === ""
         ) {
           bestIndex = combination[2];
-          console.log(cells[bestIndex]);
           break;
         } else if (
           cells[combination[0]].mark === mark &&
@@ -145,7 +145,6 @@ export function Board({ currentMark, changeMark }: BoardProps) {
           cells[combination[1]].mark === ""
         ) {
           bestIndex = combination[1];
-          console.log(cells[bestIndex]);
           break;
         } else if (
           cells[combination[2]].mark === mark &&
@@ -154,7 +153,6 @@ export function Board({ currentMark, changeMark }: BoardProps) {
           cells[combination[0]].mark === ""
         ) {
           bestIndex = combination[0];
-          console.log(cells[bestIndex]);
           break;
         }
       }

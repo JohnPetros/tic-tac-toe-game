@@ -31,9 +31,8 @@ export const Cell = styled.div<Cell>`
   border-radius: 8px;
   display: grid;
   place-content: center;
-  
 
-  pointer-events: ${({ isMarkable }) => isMarkable ? 'auto' : 'none' };
+  pointer-events: ${({ isMarkable }) => (isMarkable ? "auto" : "none")};
   &:hover {
     cursor: pointer;
   }
