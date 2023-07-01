@@ -34,16 +34,16 @@ This app is a **Tic Tac Toe Game**, where two players alternate taking turns on 
 
 ## ✨ Features
 
-[x] Set the game mode (whether single-player or multiplayer)
-[x] Set the difficulty (whether easy or hard) in case the mode is single-player
-[x] Set the name and symbol (whether `x` or `o`) of the players
-[x] Randomly set avatar of each player
-[x] Reset game settings at any moment of the game
-[x] Repeat or Reset the game at the end
-[x] Show who won the game (except in case of draw, obviously)
-[x] Increment score in case of winning
-[x] Display visual feedback indicating which player's turn it is
-[x] Display visual feedback (by a line-through) indicating which row has achieved the winning condition.
+- [x] Set the game mode (whether single-player or multiplayer)
+- [x] Set the difficulty (whether easy or hard) in case the mode is single-player
+- [x] Set the name and symbol (whether `x` or `o`) of the players
+- [x] Randomly set avatar of each player
+- [x] Reset game settings at any moment of the game
+- [x] Repeat or Reset the game at the end
+- [x] Show who won the game (except in case of draw, obviously)
+- [x] Increment score in case of winning
+- [x] Display visual feedback indicating which player's turn it is
+- [x] Display visual feedback (by a line-through) indicating which row has achieved the winning condition.
 
 ---
 
