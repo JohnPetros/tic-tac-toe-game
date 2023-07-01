@@ -80,7 +80,7 @@ $ cd tic-tac-toe-game
 # Install the dependecies
 $ npm install or yarn add
 
-# Run the app
+# Run the app in development mode
 $ npm run dev or yarn dev
 
 # Probably the app will runnig on http://localhost:5173
@@ -102,11 +102,11 @@ This app was deployed by **[Vercel](https://vercel.com/home)**. This means you c
 # Fork this repo
 $ git clone https://github.com/JohnPetros/tic-tac-toe-game.git
 
-# Create a branch with your feature;
-$ git checkout -b my-feature;
+# Create a branch with your feature
+$ git checkout -b my-feature
 
 # Commit your changes:
-$ git commit -m 'feat: My new feature';
+$ git commit -m 'feat: My new feature'
 
 # Push to your branch:
 $ git push origin my-feature
