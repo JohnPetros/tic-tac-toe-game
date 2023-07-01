@@ -91,7 +91,7 @@ $ npm run dev or yarn dev
 
 ## ⚙️ Deploy
 
-This app was deployed by **[Vercel](https://vercel.com/home)**. This means you can access the running app by accessing this **[link](https://tic-tac-toe-game-murex.vercel.app/)**.
+This app was deployed by **[Vercel](https://vercel.com/home)**. This means you can access the running app by accessing this **[link](https://tic-tac-toe-game-pearl.vercel.app/)**.
 
 ---
 
