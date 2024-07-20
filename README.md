@@ -51,13 +51,13 @@ This app is a **Tic Tac Toe Game**, where two players alternate taking turns on 
 
 This app was developed using the following technologies:
 
-✔️ **[ReactJs](https://react.dev/)**
+- **[ReactJs](https://react.dev/)**
 
-✔️ **[TypeScript](https://www.typescriptlang.org/)**
+- **[TypeScript](https://www.typescriptlang.org/)**
 
-✔️ **[Framer Motion](https://www.framer.com/motion/)**
+- **[Framer Motion](https://www.framer.com/motion/)**
 
-✔️ **[Phosphor Icons](https://phosphoricons.com/)**
+- **[Phosphor Icons](https://phosphoricons.com/)**
 
 ---
 
